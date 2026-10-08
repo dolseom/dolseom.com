@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dolseom — gongsi-mcp, disclosure compliance for Claude</title>
+<meta name="description" content="Dolseom builds Claude-native compliance tools for Korean finance teams. gongsi-mcp is an open-source MCP server that answers Korea Fair Trade Commission disclosure questions with the statute, formula and inputs behind every answer.">
+<link rel="canonical" href="https://dolseom.com/">
+<meta property="og:title" content="Dolseom — gongsi-mcp">
+<meta property="og:description" content="Do we have to disclose this, by when, and what is the fine if we are late? Answered in Claude, with citations.">
+<meta property="og:image" content="https://dolseom.com/assets/hero.jpg">
+<meta property="og:url" content="https://dolseom.com/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231f5eff'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' font-weight='700' fill='white' text-anchor='middle'%3Ed%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "gongsi-mcp",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Node.js 22.13+",
+  "license": "https://opensource.org/licenses/MIT",
+  "offers": {"@type": "Offer", "price": "0"},
+  "url": "https://dolseom.com/",
+  "downloadUrl": "https://www.npmjs.com/package/gongsi-mcp",
+  "codeRepository": "https://github.com/dolseom/gongsi-mcp",
+  "datePublished": "2026-08-11",
+  "publisher": {"@type": "Organization", "name": "Dolseom", "url": "https://dolseom.com/", "email": "founder@dolseom.com"}
+}
+</script>
+<style>
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --text: #121620;
+  --muted: #5a6273;
+  --line: #e2e5eb;
+  --accent: #1f5eff;
+  --accent-ink: #ffffff;
+  --code-bg: #0f1420;
+  --code-text: #e6e9f0;
+  --ok: #138a52;
+  --font: "Noto Sans KR", sans-serif;
+  --mono: "JetBrains Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b0e15;
+    --surface: #121722;
+    --text: #e8ebf2;
+    --muted: #9aa3b5;
+    --line: #232a38;
+    --accent: #5b8cff;
+    --accent-ink: #0b0e15;
+    --code-bg: #070a10;
+    --code-text: #e6e9f0;
+    --ok: #3ecf8e;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b0e15; --surface: #121722; --text: #e8ebf2; --muted: #9aa3b5; --line: #232a38;
+  --accent: #5b8cff; --accent-ink: #0b0e15; --code-bg: #070a10; --code-text: #e6e9f0; --ok: #3ecf8e;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; overflow-wrap: break-word; background: var(--bg); color: var(--text); font-family: var(--font); font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+main, section, .hero { overflow-x: clip; }
+.tools li code { overflow-wrap: anywhere; }
+code, pre, .mono { font-family: var(--mono); }
+
+header.top { border-bottom: 1px solid var(--line); background: var(--surface); position: sticky; top: 0; z-index: 10; }
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 16px; }
+.brand { font-family: var(--mono); font-weight: 600; font-size: 18px; color: var(--text); }
+.brand span { color: var(--accent); }
+nav.links { display: flex; gap: 20px; font-size: 14px; }
+nav.links a { color: var(--muted); }
+nav.links a:hover { color: var(--text); text-decoration: none; }
+
+.hero { padding: 64px 0 40px; }
+.eyebrow { font-family: var(--mono); font-size: 13px; color: var(--muted); letter-spacing: .02em; margin: 0 0 14px; }
+.hero h1 { font-size: clamp(30px, 5vw, 52px); line-height: 1.15; margin: 0 0 18px; letter-spacing: -0.02em; }
+.hero .lede { font-size: 19px; color: var(--muted); max-width: 720px; margin: 0 0 10px; }
+.hero .ko { font-size: 16px; color: var(--muted); margin: 0 0 28px; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+.btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 8px; font-weight: 500; font-size: 15px; border: 1px solid var(--line); color: var(--text); background: var(--surface); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn:hover { text-decoration: none; filter: brightness(1.05); }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 22px; font-family: var(--mono); font-size: 13px; color: var(--muted); padding: 0; margin: 0; list-style: none; }
+.hero-img { margin-top: 40px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
+.hero-img img { display: block; width: 100%; height: auto; }
+
+section { padding: 56px 0; border-top: 1px solid var(--line); }
+section h2 { font-size: 28px; margin: 0 0 8px; letter-spacing: -0.01em; }
+section .sub { color: var(--muted); margin: 0 0 28px; max-width: 720px; }
+
+.qa { display: grid; gap: 16px; }
+.qa article { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px 24px; }
+.qa .q { font-weight: 700; margin: 0 0 4px; }
+.qa .q-ko { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+.qa .a { margin: 0; }
+.qa .calc { display: block; margin-top: 10px; font-family: var(--mono); font-size: 13px; color: var(--muted); background: var(--bg); padding: 10px 12px; border-radius: 8px; overflow-x: auto; white-space: pre-wrap; }
+
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid3 > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
+.grid3 h3 { font-size: 17px; margin: 0 0 8px; }
+.grid3 p { margin: 0; color: var(--muted); font-size: 15px; }
+
+.tools { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.tools h3 { font-size: 15px; font-family: var(--mono); color: var(--muted); margin: 0 0 10px; font-weight: 600; }
+.tools ul { list-style: none; margin: 0; padding: 0; }
+.tools li { padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+.tools li code { font-size: 13.5px; color: var(--text); font-weight: 600; display: block; }
+.tools li span { color: var(--muted); }
+
+pre { background: var(--code-bg); color: var(--code-text); border-radius: 10px; padding: 18px 20px; overflow-x: auto; font-size: 14px; line-height: 1.6; margin: 0 0 16px; }
+.keys { width: 100%; border-collapse: collapse; font-size: 15px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.keys th, .keys td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.keys th { font-size: 13px; color: var(--muted); font-weight: 500; }
+.keys tr:last-child td { border-bottom: 0; }
+
+.limits { margin: 0; padding-left: 20px; color: var(--muted); }
+.limits li { margin-bottom: 8px; }
+
+.log { list-style: none; padding: 0; margin: 0; }
+.log li { display: grid; grid-template-columns: 110px 70px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+.log .d { font-family: var(--mono); color: var(--muted); font-size: 13.5px; }
+.log .v { font-family: var(--mono); font-weight: 600; font-size: 13.5px; }
+
+.about { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; }
+.about p { margin: 0 0 14px; }
+.about .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; font-size: 15px; }
+.about .card dt { color: var(--muted); font-size: 13px; }
+.about .card dd { margin: 0 0 12px; }
+
+footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+@media (max-width: 820px) {
+  nav.links { display: none; }
+  .grid3, .tools, .about { grid-template-columns: 1fr; }
+  .log li { grid-template-columns: 96px 60px 1fr; }
+  .hero { padding-top: 40px; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/">dolseom<span>.</span></a>
+    <nav class="links" aria-label="Main">
+      <a href="#examples">Examples</a>
+      <a href="#tools">Tools</a>
+      <a href="#install">Install</a>
+      <a href="#changelog">Changelog</a>
+      <a href="#about">About</a>
+      <a href="https://github.com/dolseom/gongsi-mcp">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero"><div class="wrap">
+    <p class="eyebrow">gongsi-mcp · open-source MCP server for Claude</p>
+    <h1>Disclosure compliance answers<br>you can verify.</h1>
+    <p class="lede">"Do we have to disclose this? By when? What is the fine if we are late?" gongsi-mcp lets Claude answer Korea Fair Trade Commission (KFTC) conglomerate disclosure questions, with the provision, formula and inputs behind every answer.</p>
+    <p class="ko" lang="ko">공정위 기업집단 공시를 제출하는 사람을 위한 MCP 서버. "이거 공시해야 하나, 언제까지, 안 하면 얼마"에 근거 조문·계산식과 함께 답합니다.</p>
+    <div class="cta">
+      <a class="btn primary" href="#install">Install in 30 seconds</a>
+      <a class="btn" href="https://github.com/dolseom/gongsi-mcp">View on GitHub</a>
+      <a class="btn" href="https://www.npmjs.com/package/gongsi-mcp">npm package</a>
+    </div>
+    <ul class="facts">
+      <li>MIT license</li>
+      <li>17 tools</li>
+      <li>430 official KFTC Q&amp;As cited verbatim</li>
+      <li>On npm since 2026-08-11</li>
+      <li>Node.js 22.13+</li>
+    </ul>
+    <div class="hero-img"><img src="/assets/hero.jpg" width="1400" height="466" alt="gongsi-mcp — disclosure compliance MCP server for Claude"></div>
+  </div></div>
+
+  <section id="examples">
+    <div class="wrap">
+      <h2>Ask the way you already talk to Claude</h2>
+      <p class="sub">No company name or API key is needed for duty, deadline and fine checks. Claude picks the right tool.</p>
+      <div class="qa">
+        <article>
+          <p class="q">"Our unlisted affiliate approved an 8.0B KRW loan to another affiliate. Total equity is 120B KRW. Do we have to disclose it, and by when?"</p>
+          <p class="q-ko" lang="ko">"비상장 계열사에 80억 자금대여 의결했어 (자본총계 1,200억). 공시 대상이야? 기한은?"</p>
+          <p class="a">Disclosure is <strong>required</strong>. The threshold is 6.0B KRW, which the 8.0B KRW transaction exceeds. Deadline: 7 business days after the board resolution (unlisted). Basis: Large-scale Internal Transaction Notice §6①.</p>
+          <span class="calc">threshold = min(10B, max(0.5B, equity 120B × 5%)) = 6B ≤ 8B</span>
+        </article>
+        <article>
+          <p class="q">"We filed a 3.0B KRW internal-transaction disclosure 5 days late. What is the expected fine?"</p>
+          <p class="q-ko" lang="ko">"30억 내부거래 공시를 5일 늦게 냈어. 과태료 얼마 나와?"</p>
+          <p class="a">Expected <strong>1.65M KRW</strong>, with the full formula. If the amount is unknown, the answer is labeled as an upper bound instead of a silent guess.</p>
+          <span class="calc">(base 5.0M + day add-on 0.5M) × 60% (2B–4B bracket) = 3.3M − 50% (≤7 days late) = 1.65M</span>
+        </article>
+        <article>
+          <p class="q">"We missed the deadline 3 days ago and still haven't filed. What changes if we file now?"</p>
+          <p class="q-ko" lang="ko">"기한 놓친 지 3일째인데 아직 공시 전이야. 지금 내면 뭐가 달라져?"</p>
+          <p class="a">The voluntary-correction window (10 business days after the deadline) is still open. You get its end date, remaining business days and exemption conditions.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="principles">
+    <div class="wrap">
+      <h2>Why it can be trusted</h2>
+      <p class="sub">In disclosure work, confident answers without evidence are worse than wrong ones.</p>
+      <div class="grid3">
+        <div>
+          <h3>Statutes, not folklore</h3>
+          <p>Common claims like "file within 1 day" or "the 5B KRW threshold" are outdated. Every answer carries the provision, formula and inputs so the officer can re-check it.</p>
+        </div>
+        <div>
+          <h3>Dates from verified calendars</h3>
+          <p>Business days use 2026–2027 holiday data checked against official notices, including substitute holidays. Unverified years return a warning.</p>
+        </div>
+        <div>
+          <h3>Never "nothing found" when unchecked</h3>
+          <p>Truncated searches, failed reconciliations and unverifiable conditions are reported as such, not folded into "no issues".</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="wrap">
+      <h2>17 tools</h2>
+      <p class="sub">You don't need to remember tool names. They are listed here for reviewers and integrators.</p>
+      <div class="tools">
+        <div>
+          <h3>Judgment &amp; risk (KFTC-specific)</h3>
+          <ul>
+            <li><code>check_disclosure_duty</code><span>Duty, deadline and expected fine, with provisions and formulas</span></li>
+            <li><code>assess_correction_risk</code><span>Risk of filing a correction, by error type</span></li>
+            <li><code>check_j004_consistency</code><span>Re-checks numbers in a submitted group status filing</span></li>
+            <li><code>audit_group_disclosures</code><span>Deadline audit: filing date vs. board resolution date</span></li>
+            <li><code>audit_periodic_disclosures</code><span>Were periodic filings submitted, and on time?</span></li>
+            <li><code>detect_undisclosed_transactions</code><span>Cross-checks reported transactions against disclosures; returns candidates, not verdicts</span></li>
+            <li><code>read_detection_result</code><span>Reads full evidence of a detection run</span></li>
+            <li><code>disclosure_calendar</code><span>Yearly periodic deadlines with D-day and overlaps</span></li>
+            <li><code>search_ftc_qna</code><span>430 official KFTC Q&amp;As for edge cases</span></li>
+            <li><code>calc_business_days</code><span>Business days, holidays and deadline dates</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Search, filings &amp; precedents</h3>
+          <ul>
+            <li><code>search_disclosures</code><span>DART search with KFTC presets; reports truncation</span></li>
+            <li><code>read_disclosure</code><span>Filing text as Markdown, board resolution date extracted</span></li>
+            <li><code>find_precedents</code><span>How other companies wrote the same filing, up to 5 years</span></li>
+            <li><code>resolve_entity</code><span>Identifies companies and business groups unambiguously</span></li>
+            <li><code>get_group_structure</code><span>Group overview, all affiliates and financials</span></li>
+            <li><code>get_financials</code><span>Financial statements that feed the judgment tools</span></li>
+            <li><code>server_info</code><span>Version, key status and remaining daily calls</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="wrap">
+      <h2>Install</h2>
+      <p class="sub">Requires Node.js 22.13 or later. Duty, deadline, fine and business-day checks work without any key.</p>
+      <pre><code># Claude Code
+npx -y gongsi-mcp setup
+claude mcp add gongsi-mcp -- npx -y gongsi-mcp</code></pre>
+      <pre><code>// Claude Desktop — claude_desktop_config.json
+{
+  "mcpServers": {
+    "gongsi-mcp": {
+      "command": "npx",
+      "args": ["-y", "gongsi-mcp"],
+      "env": { "DART_API_KEY": "your OpenDART key" }
+    }
+  }
+}</code></pre>
+      <table class="keys">
+        <thead><tr><th>Feature</th><th>Key</th></tr></thead>
+        <tbody>
+          <tr><td>Duty, deadline, fine, business days, calendar, correction risk, KFTC Q&amp;A</td><td>None</td></tr>
+          <tr><td>Filing search, full text, precedents, financials, audits, undisclosed-transaction detection</td><td><code>DART_API_KEY</code> (free, OpenDART)</td></tr>
+          <tr><td>Business-group-wide queries and audits</td><td><code>EGROUP_API_KEY</code> (public data portal)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="limits">
+    <div class="wrap">
+      <h2>Limits</h2>
+      <ul class="limits">
+        <li>Results are reference information based on statutes and official notices. They are not legal advice or an official KFTC interpretation.</li>
+        <li>Calculations and citations are verified, but Claude's final summary can drop a condition. Compare conclusions with the cited text.</li>
+        <li>Filing checks read filings already submitted to DART, not unsubmitted drafts.</li>
+        <li>No automatic filing. Judgment, evidence and drafts are the tool's job; submission stays with the officer.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="changelog">
+    <div class="wrap">
+      <h2>Changelog</h2>
+      <p class="sub">Release dates from the npm registry. Release notes are on <a href="https://github.com/dolseom/gongsi-mcp">GitHub</a>.</p>
+      <ul class="log">
+        <li><span class="d">2026-09-29</span><span class="v">0.3.2</span><span>Maintenance release</span></li>
+        <li><span class="d">2026-09-21</span><span class="v">0.3.1</span><span>Fixed matrix parsing in undisclosed-transaction detection; unchecked tables are now counted and reported</span></li>
+        <li><span class="d">2026-09-15</span><span class="v">0.3.0</span><span>17 tools: partial-input judgments, detection summary with <code>read_detection_result</code>, cancellation handling</span></li>
+        <li><span class="d">2026-08-30</span><span class="v">0.2.0</span><span>16 tools</span></li>
+        <li><span class="d">2026-08-15</span><span class="v">0.1.3</span><span>Patch release</span></li>
+        <li><span class="d">2026-08-13</span><span class="v">0.1.2</span><span>Patch release</span></li>
+        <li><span class="d">2026-08-12</span><span class="v">0.1.1</span><span>Patch release</span></li>
+        <li><span class="d">2026-08-11</span><span class="v">0.1.0</span><span>First public release on npm</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap about">
+      <div>
+        <h2>About Dolseom</h2>
+        <p>Dolseom builds Claude-native compliance tools for finance and disclosure teams at Korean companies. Every tool follows one rule: an answer must come with evidence a human can check.</p>
+        <p>gongsi-mcp is built by a finance professional who files these disclosures, using Claude Code end to end. Next, the same approach is being extended to Korean tax and accounting law with <a href="https://github.com/dolseom/fin-law-mcp">fin-law-mcp</a> (open source).</p>
+        <p lang="ko">돌섬은 한국 기업 재무·공시팀을 위한 Claude 기반 컴플라이언스 도구를 만듭니다. 모든 답에는 사람이 다시 확인할 수 있는 근거가 붙어야 한다는 원칙 하나로 만듭니다.</p>
+      </div>
+      <dl class="card">
+        <dt>Products</dt>
+        <dd><a href="https://github.com/dolseom/gongsi-mcp">gongsi-mcp</a> · <a href="https://github.com/dolseom/fin-law-mcp">fin-law-mcp</a></dd>
+        <dt>Based in</dt>
+        <dd>South Korea</dd>
+        <dt>Contact</dt>
+        <dd><a href="mailto:founder@dolseom.com">founder@dolseom.com</a></dd>
+        <dt>Issues &amp; feedback</dt>
+        <dd><a href="https://github.com/dolseom/gongsi-mcp/issues">GitHub Issues</a></dd>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Dolseom</span>
+    <span><a href="/llms.txt">llms.txt</a> · <a href="https://github.com/dolseom">github.com/dolseom</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

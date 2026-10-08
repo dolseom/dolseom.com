@@ -1,0 +1,19 @@
+# Dolseom
+
+> Dolseom builds Claude-native compliance tools for finance and disclosure teams at Korean companies. Every answer must come with evidence a human can check.
+
+## Products
+
+- [gongsi-mcp](https://github.com/dolseom/gongsi-mcp): Open-source (MIT) MCP server for Claude. Answers Korea Fair Trade Commission (KFTC) conglomerate disclosure questions — whether a transaction must be disclosed, the deadline, and the expected fine for late filing — with the provision, formula and inputs behind each answer. 17 tools, 430 official KFTC Q&As cited verbatim. Published on npm since 2026-08-11 (https://www.npmjs.com/package/gongsi-mcp). Node.js 22.13+.
+- [fin-law-mcp](https://github.com/dolseom/fin-law-mcp): Open-source MCP server for Korean tax, accounting and finance law lookup and citation checking.
+
+## Install
+
+- Claude Code: `npx -y gongsi-mcp setup` then `claude mcp add gongsi-mcp -- npx -y gongsi-mcp`
+
+## Company
+
+- Name: Dolseom
+- Based in: South Korea
+- Contact: founder@dolseom.com
+- Built with: Claude Code
