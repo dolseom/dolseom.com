@@ -30,6 +30,20 @@
   "publisher": {"@type": "Organization", "name": "Dolseom", "url": "https://dolseom.com/", "email": "founder@dolseom.com", "foundingDate": "2026-04", "foundingLocation": "South Korea", "sameAs": ["https://github.com/dolseom", "https://www.npmjs.com/package/gongsi-mcp"]}
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Dolseom",
+  "url": "https://dolseom.com/",
+  "logo": "https://dolseom.com/assets/logo.svg",
+  "email": "founder@dolseom.com",
+  "foundingDate": "2026-04",
+  "address": {"@type": "PostalAddress", "addressCountry": "KR"},
+  "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": "founder@dolseom.com", "availableLanguage": ["English", "Korean"]},
+  "sameAs": ["https://github.com/dolseom", "https://www.npmjs.com/package/gongsi-mcp"]
+}
+</script>
 <style>
 :root {
   --bg: #f7f8fa;
@@ -155,6 +169,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
     <a class="brand" href="/">dolseom<span>.</span></a>
     <nav class="links" aria-label="Main">
       <a href="#examples">Examples</a>
+      <a href="#output">Output</a>
       <a href="#tools">Tools</a>
       <a href="#install">Install</a>
       <a href="#changelog">Changelog</a>
@@ -194,7 +209,7 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
         <article>
           <p class="q">"Our unlisted affiliate approved an 8.0B KRW loan to another affiliate. Total equity is 120B KRW. Do we have to disclose it, and by when?"</p>
           <p class="q-ko" lang="ko">"비상장 계열사에 80억 자금대여 의결했어 (자본총계 1,200억). 공시 대상이야? 기한은?"</p>
-          <p class="a">Disclosure is <strong>required</strong>. The threshold is 6.0B KRW, which the 8.0B KRW transaction exceeds. Deadline: 7 business days after the board resolution (unlisted). Basis: Large-scale Internal Transaction Notice §6①.</p>
+          <p class="a">Disclosure is <strong>required</strong> if the counterparty is a related party (the tool lists this as an open condition). The threshold is 6.0B KRW, which the 8.0B KRW transaction exceeds. Deadline: 7 business days after the board resolution (unlisted). Basis: Large-scale Internal Transaction Notice §6①.</p>
           <span class="calc">threshold = min(10B, max(0.5B, equity 120B × 5%)) = 6B ≤ 8B</span>
         </article>
         <article>
@@ -209,6 +224,37 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
           <p class="a">The voluntary-correction window (10 business days after the deadline) is still open. You get its end date, remaining business days and exemption conditions.</p>
         </article>
       </div>
+    </div>
+  </section>
+
+  <section id="output">
+    <div class="wrap">
+      <h2>Real tool output</h2>
+      <p class="sub">An unedited excerpt of what <code>check_disclosure_duty</code> returned for the first example above. This is what Claude reads before it answers. Run on 2026-10-10 with gongsi-mcp 0.4.0, Node.js 24, Windows.</p>
+      <pre><code>{
+  "duty": "large_internal_transaction",
+  "verdict": "required",
+  "threshold": {
+    "amount": 6000000000,
+    "formula": "max(자본총계 1200억원, 자본금 미입력) = 1200억원 (입력된 값만으로 계산)  × 5% = 60억원  min(100억원, 60억원) = 60억원  ※ 자본금 미입력 — 그 값이 더 크면 기준금액은 이보다 높아질 수 있습니다(하한값)"
+  },
+  "deadline": {
+    "deadline": "20261020",
+    "rule": "비상장회사·공익법인: 이사회 의결일(20261008) 다음 날부터 7영업일 이내",
+    "legalBasis": [
+      { "source": "대규모내부거래 등에 대한 이사회 의결 및 공시에 관한 규정 제6조제1항" },
+      { "source": "같은 규정 제6조제2항" }
+    ]
+  },
+  "review": {
+    "unresolved": [
+      "금액 기준 충족은 대규모내부거래 요건의 일부입니다 — 상대방이 특수관계인(국외 계열회사 제외)인지 … 이 도구가 확인하지 않습니다."
+    ]
+  },
+  "relatedOfficialQna": [ /* 3 official KFTC Q&amp;As with source URLs */ ],
+  "disclaimer": "본 판정은 공개된 법령·고시에 기반한 참고 정보이며 공정거래위원회의 공식 유권해석이 아닙니다."
+}</code></pre>
+      <p class="sub" style="margin:0">Note the <code>unresolved</code> field: the amount test passed, but the tool states what it did not check (whether the counterparty is a related party) instead of reporting a clean "yes".</p>
     </div>
   </section>
 
@@ -360,7 +406,7 @@ claude mcp add gongsi-mcp -- npx -y gongsi-mcp</code></pre>
 <footer>
   <div class="wrap">
     <span>© 2026 Dolseom</span>
-    <span><a href="/llms.txt">llms.txt</a> · <a href="https://github.com/dolseom">github.com/dolseom</a></span>
+    <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/llms.txt">llms.txt</a> · <a href="https://github.com/dolseom">github.com/dolseom</a></span>
   </div>
 </footer>
 

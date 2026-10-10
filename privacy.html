@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Dolseom</title>
+<meta name="description" content="How Dolseom and its open-source tools handle data: the tools run locally and send nothing to Dolseom.">
+<link rel="canonical" href="https://dolseom.com/privacy">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231f5eff'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='18' font-weight='700' fill='white' text-anchor='middle'%3Ed%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#f7f8fa; --surface:#fff; --text:#121620; --muted:#5a6273; --line:#e2e5eb; --accent:#1f5eff; --font:"Noto Sans KR",sans-serif; --mono:"JetBrains Mono",monospace; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#0b0e15; --surface:#121722; --text:#e8ebf2; --muted:#9aa3b5; --line:#232a38; --accent:#5b8cff; } }
+:root[data-theme="dark"] { --bg:#0b0e15; --surface:#121722; --text:#e8ebf2; --muted:#9aa3b5; --line:#232a38; --accent:#5b8cff; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:var(--font); font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased; overflow-wrap:break-word; }
+a { color:var(--accent); text-decoration:none; } a:hover { text-decoration:underline; }
+.wrap { max-width:760px; margin:0 auto; padding:0 16px; }
+header { border-bottom:1px solid var(--line); background:var(--surface); }
+header .wrap { height:60px; display:flex; align-items:center; justify-content:space-between; }
+.brand { font-family:var(--mono); font-weight:600; font-size:18px; color:var(--text); } .brand span { color:var(--accent); }
+main { padding:48px 0 56px; }
+h1 { font-size:32px; line-height:1.2; margin:0 0 6px; letter-spacing:-0.01em; }
+.meta { color:var(--muted); font-family:var(--mono); font-size:13px; margin:0 0 32px; }
+h2 { font-size:19px; margin:32px 0 8px; }
+p, li { color:var(--text); } ul { padding-left:20px; }
+.ko { color:var(--muted); font-size:15px; border-top:1px solid var(--line); margin-top:40px; padding-top:20px; }
+code { font-family:var(--mono); font-size:14px; }
+footer { border-top:1px solid var(--line); padding:24px 0 40px; color:var(--muted); font-size:14px; }
+footer .wrap { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="/">dolseom<span>.</span></a><a href="/" style="font-size:14px">Home</a></div></header>
+<main><div class="wrap"><h1>Privacy Policy</h1>
+<p class="meta">Effective 2026-10-10</p>
+<p>Dolseom ("we") builds open-source tools that run on your own computer. This policy explains what data we handle. Short version: our tools do not send your data to us.</p>
+
+<h2>1. Our software (gongsi-mcp, fin-law-mcp)</h2>
+<ul>
+  <li>The software runs locally on your machine as an MCP server for Claude. It has no telemetry, analytics or crash reporting, and it never sends data to Dolseom.</li>
+  <li>gongsi-mcp contacts only public government services, and only when you ask a question that needs them: OpenDART (<code>opendart.fss.or.kr</code>, <code>dart.fss.or.kr</code>) operated by the Financial Supervisory Service, and the public data portal (<code>apis.data.go.kr</code>, <code>data.go.kr</code>). Official KFTC Q&amp;As are bundled with the package.</li>
+  <li>API keys you enter are stored only on your computer (<code>~/.gongsi-mcp/.env</code>). Fetched public filings are cached locally (<code>~/.gongsi-mcp/cache.db</code>). You can delete both at any time.</li>
+  <li>Your questions to Claude are handled by Anthropic under Anthropic's own terms and privacy policy, not by us.</li>
+</ul>
+
+<h2>2. This website</h2>
+<ul>
+  <li>dolseom.com uses no cookies, no analytics and no tracking scripts.</li>
+  <li>It is hosted on Vercel, which keeps standard server logs (such as IP address and request time) to operate the service. Fonts are loaded from Google Fonts.</li>
+</ul>
+
+<h2>3. Email</h2>
+<p>If you write to founder@dolseom.com, we use your address and message only to reply. We do not add you to any mailing list and do not share your message.</p>
+
+<h2>4. Third parties</h2>
+<p>We do not sell, rent or share personal data. We do not collect any personal data through our software.</p>
+
+<h2>5. Changes and contact</h2>
+<p>If this policy changes, we will update this page and its effective date. Questions: <a href="mailto:founder@dolseom.com">founder@dolseom.com</a>.</p>
+
+<div class="ko" lang="ko">
+<p><strong>요약(한국어)</strong> 돌섬의 도구는 사용자 PC에서만 실행되며 돌섬으로 어떤 데이터도 보내지 않습니다. gongsi-mcp는 질문에 필요할 때만 공공 API(OpenDART, 공공데이터포털)에 접속합니다. 인증키와 캐시는 사용자 PC에만 저장됩니다. 이 웹사이트는 쿠키·분석 도구를 쓰지 않습니다. 문의: founder@dolseom.com</p>
+</div></div></main>
+<footer><div class="wrap"><span>© 2026 Dolseom · South Korea</span><span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="mailto:founder@dolseom.com">founder@dolseom.com</a></span></div></footer>
+</body>
+</html>

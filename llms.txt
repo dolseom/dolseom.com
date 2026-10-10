@@ -17,3 +17,5 @@
 - Based in: South Korea
 - Contact: founder@dolseom.com
 - Built with: Claude Code
+- Privacy: https://dolseom.com/privacy (tools run locally, no telemetry)
+- Terms: https://dolseom.com/terms
