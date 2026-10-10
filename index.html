@@ -119,6 +119,19 @@ section .sub { color: var(--muted); margin: 0 0 28px; max-width: 720px; }
 .qa .a { margin: 0; }
 .qa .calc { display: block; margin-top: 10px; font-family: var(--mono); font-size: 13px; color: var(--muted); background: var(--bg); padding: 10px 12px; border-radius: 8px; overflow-x: auto; white-space: pre-wrap; }
 
+.chat { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: grid; gap: 14px; max-width: 760px; }
+.chat-tag { font-family: var(--mono); font-size: 12px; color: var(--muted); border: 1px dashed var(--line); border-radius: 6px; padding: 4px 8px; justify-self: start; }
+.msg { border-radius: 12px; padding: 14px 16px; font-size: 15px; line-height: 1.65; }
+.msg p { margin: 0 0 8px; } .msg p:last-child { margin: 0; }
+.msg.user { background: var(--accent); color: var(--accent-ink); justify-self: end; max-width: 85%; }
+.msg.bot { background: var(--bg); border: 1px solid var(--line); }
+.call { border-left: 3px solid var(--accent); background: var(--bg); border-radius: 8px; padding: 10px 12px; display: grid; gap: 6px; font-size: 13px; }
+.call-name { font-family: var(--mono); font-weight: 600; color: var(--text); overflow-wrap: anywhere; }
+.call code { font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+.call-out { font-family: var(--mono); font-size: 12.5px; color: var(--ok); overflow-wrap: anywhere; }
+.mono-line { font-family: var(--mono); font-size: 13.5px; color: var(--muted); overflow-wrap: anywhere; }
+.muted-line { color: var(--muted); font-size: 14px; }
+
 .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .grid3 > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; }
 .grid3 h3 { font-size: 17px; margin: 0 0 8px; }
@@ -231,7 +244,25 @@ footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; g
 
   <section id="output">
     <div class="wrap">
-      <h2>Real tool output</h2>
+      <h2>What a conversation looks like</h2>
+      <p class="sub">Illustration, not a screenshot. The question, tool call and answer are rebuilt from the real output below (gongsi-mcp 0.4.0, run 2026-10-10).</p>
+      <figure class="chat" aria-label="Illustrative conversation using gongsi-mcp">
+        <figcaption class="chat-tag">Illustration · rebuilt from real output</figcaption>
+        <div class="msg user" lang="ko">비상장 계열사에 80억 자금대여를 이사회에서 의결했어(10/8). 자본총계 1,200억이야. 공시 대상이야? 기한은?</div>
+        <div class="call">
+          <span class="call-name">tool call · gongsi-mcp · check_disclosure_duty</span>
+          <code>{ duty: "large_internal_transaction", amount: 8000000000, totalEquity: 120000000000, listing: "unlisted", boardDate: "20261008" }</code>
+          <span class="call-out">→ verdict: required · threshold 6,000,000,000 · deadline 20261020 · unresolved: counterparty status · 3 official Q&amp;As</span>
+        </div>
+        <div class="msg bot" lang="ko">
+          <p><strong>상대방이 특수관계인(계열회사)이면 공시 대상입니다.</strong> 거래금액 80억원이 기준금액 60억원 이상입니다.</p>
+          <p class="mono-line">기준금액 = min(100억, max(5억, 자본총계 1,200억 × 5%)) = 60억원</p>
+          <p><strong>기한: 2026-10-20</strong> — 비상장회사는 이사회 의결일 다음 날부터 7영업일 이내 (대규모내부거래 고시 제6조제1항).</p>
+          <p class="muted-line">확인 필요: 거래상대방이 특수관계인인지는 도구가 판단하지 않았습니다. 자본금이 자본총계보다 크면 기준금액이 달라집니다.</p>
+        </div>
+      </figure>
+
+      <h2 style="margin-top:48px">Real tool output</h2>
       <p class="sub">An unedited excerpt of what <code>check_disclosure_duty</code> returned for the first example above. This is what Claude reads before it answers. Run on 2026-10-10 with gongsi-mcp 0.4.0, Node.js 24, Windows.</p>
       <pre><code>{
   "duty": "large_internal_transaction",
